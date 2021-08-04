@@ -75,6 +75,24 @@ header > ion-icon{
     cursor: pointer;
 }
 
+main{
+    margin-top: 106px;
+}
+
+.msg{
+    min-height: 40px;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 0 9px;
+    background-color: #ffff;
+}
+
+.bold{
+    font-weight: bold;
+}
 
 footer{
     width: 100%;
