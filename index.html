@@ -11,14 +11,39 @@
   <body>
     <header>
         <img class="logo" src="./img/logo 1.png" alt="logo do chat uol"/>
-        <ion-icon class="perfil" name="people"></ion-icon>
+        <ion-icon name="people" onclick="userNav()"></ion-icon>
     </header>
-    <div></div>
+
+    <main></main>
+
     <footer>
       <input type="text" id="msgText" name="msgText" placeholder="Escreva aqui..."/>
       <ion-icon name="paper-plane-outline"></ion-icon>
     </footer>
 
+    <div class="container-shadow" onclick="closeNav()"></div>
+    <nav>
+      <div class="onlineUsers-title">Escolha um contato<br/>
+        para enviar mensagem:
+      </div>
+      <ul class="onlineUsers">
+        <li class="onlineUser">
+          <ion-icon name="people"></ion-icon>
+          Todos
+        </li>
+      </ul>
+      <div class="msgVisibility-title">Escolha a visibilidade:</div>
+      <ul class="msgVisibility">
+        <li>
+          <ion-icon name="lock-open"></ion-icon>
+          Público
+        </li>
+        <li>
+          <ion-icon name="lock-closed"></ion-icon>
+          Reservadamente
+        </li>
+      </ul>
+    </nav>
     <!-- scripts -->
     <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
     <script src="./js/scripts.js"></script>
