@@ -1,18 +1,28 @@
 const msgs = [{name: "Victor", dest:"Todos", time:"12:37:50", msg:"Que site mais bacana"}, {name: "Pedro", dest:"Todos", time:"12:38:50", msg:"It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution"}];
-
+const URL_PARTICIPANTS = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/participants";
+const URL_STATUS = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/status";
 let userName ="";
 
 function loginName(name){
-    const request = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/participants",{name: name});
+    const request = axios.post(URL_PARTICIPANTS,{name: name});
     request.then(nameAvailable);
     request.catch(nameUnavailable);
 }
 
-function nameAvailable(response){
+function stayConected(){
+    setInterval(function (){
+        let promise = axios.post(URL_STATUS,{name: userName});
+        promise.then(function(){console.log("conectado");});
+        promise.catch(function(){alert("Erro em manter conexão");});
+    },5000)
+}
+
+function nameAvailable(){
     let userLogin = document.querySelector(".userLogin");
     let name = document.getElementById("userName").value;
     userName = name;
     userLogin.style.display = "none";
+    stayConected();
 }
 
 function nameUnavailable(error){
