@@ -1,10 +1,12 @@
 const URL_PARTICIPANTS = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/participants";
 const URL_STATUS = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/status";
 const URL_MESSAGES = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/messages";
+//INITIAL VALUES
 let userName ="";
 let msgs = [];
 let lastMsgTime;
-
+let to = "Todos";
+let type = "message";
 
 function stayConected(){
     setInterval(function (){
@@ -66,10 +68,12 @@ function loadChat(){
                     </li>`;
                 break;
             case "private_message":
-                chatContent += `
-                    <li class="msg private">
-                        <p>(${msgs[i].time}) <span class="bold">${msgs[i].from}</span> para <span class="bold">${msgs[i].to}</span>: ${msgs[i].text}</p> 
-                    </li>`;
+                if (msgs[i].to === userName){
+                    chatContent += `
+                        <li class="msg private">
+                            <p>(${msgs[i].time}) <span class="bold">${msgs[i].from}</span> para <span class="bold">${msgs[i].to}</span>: ${msgs[i].text}</p> 
+                        </li>`;
+                }
                 break;
             default:
                 chatContent += `
@@ -90,6 +94,31 @@ function enterChat(){
     setLoading();
     request.then(nameAvailable);
     request.catch(nameUnavailable);
+}
+
+function sendMsg(){
+    let msg = document.getElementById("msgText").value;
+    let request = axios.post(URL_MESSAGES,
+    {
+        from: userName,
+        to: to,
+        text: msg,
+        type: type
+    });
+    request.then(send);
+    request.catch(sendError);
+}
+
+function send(){
+    document.getElementById("msgText").value="";
+    updateMsgs();
+}
+
+function sendError(error){
+    let statusCode = error.response.status;
+    if (statusCode === 400){
+        alert("Mensagem inválida");
+    }
 }
 
 function userNav(){
