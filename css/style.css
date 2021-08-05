@@ -109,6 +109,11 @@ header > ion-icon{
     padding: 0 9px;
     background-color: #ffff;
     margin-bottom: 4px;
+    line-height: 20px;
+}
+
+.msg > p{
+    word-break:break-word ;
 }
 
 .status{
@@ -116,7 +121,7 @@ header > ion-icon{
 }
 
 .private{
-    background-color: #FFDEDE, 100%;
+    background-color: #FFDEDE;
 }
 
 .bold{
@@ -190,6 +195,7 @@ nav  ion-icon{
     margin-right: 8px;
 }
 
+
 .onlineUsers-title{
     width: 100%;
     height: 84px;
@@ -204,6 +210,20 @@ nav  ion-icon{
     display: flex;
     align-items: center;
     margin-bottom: 16px;
+    position: relative;
+}
+
+.check{
+    display: none;
+    width: 9px;
+    height: 7px;
+    position: absolute;
+    top: 6px;
+    right: 30px;
+} 
+
+.selectedUser{
+    display: block;
 }
 
 .msgVisibility-title{

@@ -39,9 +39,10 @@
         para enviar mensagem:
       </div>
       <ul class="onlineUsers">
-        <li class="onlineUser">
+        <li class="onlineUser" onclick="selectOnlineUser()">
           <ion-icon name="people"></ion-icon>
-          Todos
+          <span id="user">Todos</span>
+          <img class="check selectedUser" src="./img/check.png" alt="usuário selecionado"/>
         </li>
       </ul>
       <div class="msgVisibility-title">Escolha a visibilidade:</div>

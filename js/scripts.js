@@ -3,7 +3,7 @@ const URL_STATUS = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/statu
 const URL_MESSAGES = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/messages";
 //INITIAL VALUES
 let userName ="";
-let msgs = [];
+let msgs, onlineUsers = [];
 let lastMsgTime;
 let to = "Todos";
 let type = "message";
@@ -22,6 +22,8 @@ function nameAvailable(){
     userName = name;
     userLogin.style.display = "none";
     stayConected();
+    getOnlineUsers();
+    setInterval(getOnlineUsers,10000);
     setInterval(updateMsgs,3000);
 }
 
@@ -68,7 +70,7 @@ function loadChat(){
                     </li>`;
                 break;
             case "private_message":
-                if (msgs[i].to === userName){
+                if (msgs[i].to === userName || msgs[i].from === userName){
                     chatContent += `
                         <li class="msg private">
                             <p>(${msgs[i].time}) <span class="bold">${msgs[i].from}</span> para <span class="bold">${msgs[i].to}</span>: ${msgs[i].text}</p> 
@@ -77,7 +79,7 @@ function loadChat(){
                 break;
             default:
                 chatContent += `
-                    <li class="msg">
+                    <li class="msg ">
                         <p>(${msgs[i].time}) <span class="bold">${msgs[i].from}</span> para <span class="bold">${msgs[i].to}</span>: ${msgs[i].text}</p> 
                     </li>`;
                 break;
@@ -121,6 +123,69 @@ function sendError(error){
     }
 }
 
+function getOnlineUsers(){
+    let promise = axios.get(URL_PARTICIPANTS);
+    promise.then(populateOnlineUsers);
+    promise.catch(populateUsersErro);
+}
+
+function populateOnlineUsers(users){
+    let online = document.querySelector(".onlineUsers");
+    let content;
+
+    if(to === "Todos"){
+        content = `<li class="onlineUser" onclick="selectOnlineUser(this)">
+                        <ion-icon name="people"></ion-icon>
+                        <span id="user">Todos</span>
+                        <img class="check selectedUser" src="./img/check.png" alt="usuário selecionado"/>
+                    </li>`;
+    }else{
+        content = `<li class="onlineUser" onclick="selectOnlineUser(this)">
+                        <ion-icon name="people"></ion-icon>
+                        <span id="user">Todos</span>
+                        <img class="check" src="./img/check.png" alt="usuário selecionado"/>
+                    </li>`;
+    }
+    
+
+                    
+    onlineUsers = users.data;
+    for (let i=0; i<onlineUsers.length; i++){
+        if(onlineUsers[i].name === to){
+            content += `
+            <li class="onlineUser" onclick="selectOnlineUser(this)">
+                <ion-icon name="person-circle"></ion-icon>
+                <span id="user">${onlineUsers[i].name}</span>
+                <img class="check selectedUser" src="./img/check.png" alt="usuário selecionado"/>
+            </li>`;
+        }else{
+            content += `
+            <li class="onlineUser" onclick="selectOnlineUser(this)">
+                <ion-icon name="person-circle"></ion-icon>
+                <span id="user">${onlineUsers[i].name}</span>
+                <img class="check" src="./img/check.png" alt="usuário selecionado"/>
+            </li>`;
+        }
+    }
+    online.innerHTML = content;
+}
+
+function populateUsersErro(error){
+    alert("Erro em listar usuários online");
+}
+
+function selectOnlineUser(user){
+    let lastChecked = document.querySelector(".selectedUser");
+
+    if(lastChecked !== null){
+        lastChecked.classList.remove("selectedUser");
+    }
+    
+    to = user.querySelector("#user").innerHTML;
+    user.querySelector(".check").classList.add("selectedUser");
+}
+
+
 function userNav(){
     let nav = document.querySelector("nav");
     let containerShadow = document.querySelector(".container-shadow");
@@ -146,3 +211,15 @@ function removeLoading(){
     let loading = document.querySelector(".loading");
     loading.style.display = "none";
 }
+
+//send msg with enter key
+let input = document.getElementById("msgText");
+input.addEventListener("keyup", function(event) {
+  // Number 13 is the "Enter" key on the keyboard
+  if (event.keyCode === 13) {
+    // Cancel the default action, if needed
+    event.preventDefault();
+    // Trigger the button element with a click
+    sendMsg();
+  }
+});
