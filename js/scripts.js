@@ -26,6 +26,7 @@ function nameAvailable(){
 function nameUnavailable(error){
     let statusCode = error.response.status;
     if(statusCode === 400){
+        removeLoading();
         alert("O nome já está sendo usado ou é inválido");
     }
 }
@@ -86,6 +87,7 @@ function loadChat(){
 function enterChat(){
     let userName = document.getElementById("userName").value;
     const request = axios.post(URL_PARTICIPANTS,{name: userName});
+    setLoading();
     request.then(nameAvailable);
     request.catch(nameUnavailable);
 }
@@ -104,4 +106,14 @@ function closeNav(){
     containerShadow.style.display = "none";
     nav.style.display = "none";
     nav.style.width = "-260px";
+}
+
+function setLoading(){
+    let loading = document.querySelector(".loading");
+    loading.style.display = "flex";
+}
+
+function removeLoading(){
+    let loading = document.querySelector(".loading");
+    loading.style.display = "none";
 }
