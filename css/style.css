@@ -75,8 +75,8 @@ header > ion-icon{
     cursor: pointer;
 }
 
-main{
-    margin-top: 106px;
+.msgs{
+    margin: 106px 0 95px 0;
 }
 
 .msg{
@@ -88,6 +88,15 @@ main{
     align-items: center;
     padding: 0 9px;
     background-color: #ffff;
+    margin-bottom: 4px;
+}
+
+.status{
+    background-color: #DCDCDC;
+}
+
+.private{
+    background-color: #FFDEDE, 100%;
 }
 
 .bold{

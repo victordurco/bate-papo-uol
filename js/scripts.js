@@ -1,20 +1,17 @@
-const msgs = [{name: "Victor", dest:"Todos", time:"12:37:50", msg:"Que site mais bacana"}, {name: "Pedro", dest:"Todos", time:"12:38:50", msg:"It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution"}];
 const URL_PARTICIPANTS = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/participants";
 const URL_STATUS = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/status";
+const URL_MESSAGES = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/messages";
 let userName ="";
+let msgs = [];
+let lastMsgTime;
 
-function loginName(name){
-    const request = axios.post(URL_PARTICIPANTS,{name: name});
-    request.then(nameAvailable);
-    request.catch(nameUnavailable);
-}
 
 function stayConected(){
     setInterval(function (){
         let promise = axios.post(URL_STATUS,{name: userName});
-        promise.then(function(){console.log("conectado");});
+        promise.then();
         promise.catch(function(){alert("Erro em manter conexão");});
-    },5000)
+    },5000);
 }
 
 function nameAvailable(){
@@ -23,6 +20,7 @@ function nameAvailable(){
     userName = name;
     userLogin.style.display = "none";
     stayConected();
+    setInterval(updateMsgs,3000);
 }
 
 function nameUnavailable(error){
@@ -32,22 +30,64 @@ function nameUnavailable(error){
     }
 }
 
+function updateMsgs(){
+    const promise = axios.get(URL_MESSAGES);
+    promise.then(function(response){
+        msgs = response.data;
+        loadChat();
+    });
+    promise.catch(function(){
+        alert("Você está desconectado da sala");
+        window.location.reload();
+    })
+}
+
+function setChatView(){
+    let lastMsg = document.querySelector(".msgs").lastChild;
+    let lastTime = msgs[msgs.length-1].time;
+    if (lastMsgTime !== lastTime){
+        lastMsgTime = lastTime;
+        lastMsg.scrollIntoView();
+    }else{
+        return;
+    }
+}
+
 function loadChat(){
-    let chat = document.querySelector("main");
+    let chat = document.querySelector(".msgs");
     let chatContent = "";
     for (let i=0; i<msgs.length; i++){
-        chatContent += `
-        <li class="msg">
-           <p>(${msgs[i].time}) <span class="bold">${msgs[i].name}</span> para <span class="bold">${msgs[i].dest}</span>: ${msgs[i].msg}</p> 
-        </li>`
+        switch (msgs[i].type){
+            case "status":
+                chatContent += `
+                    <li class="msg status">
+                        <p>(${msgs[i].time}) <span class="bold">${msgs[i].from}</span> para <span class="bold">${msgs[i].to}</span>: ${msgs[i].text}</p> 
+                    </li>`;
+                break;
+            case "private_message":
+                chatContent += `
+                    <li class="msg private">
+                        <p>(${msgs[i].time}) <span class="bold">${msgs[i].from}</span> para <span class="bold">${msgs[i].to}</span>: ${msgs[i].text}</p> 
+                    </li>`;
+                break;
+            default:
+                chatContent += `
+                    <li class="msg">
+                        <p>(${msgs[i].time}) <span class="bold">${msgs[i].from}</span> para <span class="bold">${msgs[i].to}</span>: ${msgs[i].text}</p> 
+                    </li>`;
+                break;
+        }
+        
     }
     chat.innerHTML = chatContent;
+    setChatView();
 }
 
 function enterChat(){
     let userName = document.getElementById("userName").value;
-    loginName(userName);
-    loadChat();
+    const request = axios.post(URL_PARTICIPANTS,{name: userName});
+    request.then(nameAvailable);
+    request.catch(nameUnavailable);
 }
 
 function userNav(){
