@@ -42,18 +42,20 @@
         <li class="onlineUser" onclick="selectOnlineUser()">
           <ion-icon name="people"></ion-icon>
           <span id="user">Todos</span>
-          <img class="check selectedUser" src="./img/check.png" alt="usuário selecionado"/>
+          <img class="check selected" src="./img/check.png" alt="usuário selecionado"/>
         </li>
       </ul>
       <div class="msgVisibility-title">Escolha a visibilidade:</div>
       <ul class="msgVisibility">
-        <li>
+        <li onclick="setType('message')">
           <ion-icon name="lock-open"></ion-icon>
-          Público
+          <span id="type">Público</span>
+          <img class="check selected" src="./img/check.png" alt="tipo de mensagem selecionada"/>
         </li>
-        <li>
+        <li onclick="setType('private_message')">
           <ion-icon name="lock-closed"></ion-icon>
-          Reservadamente
+          <span id="type">Reservadamente</span>
+          <img class="check" src="./img/check.png" alt="tipo de mensagem selecionada"/>
         </li>
       </ul>
     </nav>

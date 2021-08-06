@@ -56,7 +56,7 @@ body{
     left: 0;
     top: 200px;
     width: 100%;
-    height: 200px;
+    height: 250px;
     z-index: 2;
 }
 
@@ -222,7 +222,7 @@ nav  ion-icon{
     right: 30px;
 } 
 
-.selectedUser{
+.selected{
     display: block;
 }
 
@@ -240,4 +240,5 @@ nav  ion-icon{
     display: flex;
     align-items: center;
     margin-bottom: 14px;
+    position: relative;
 }

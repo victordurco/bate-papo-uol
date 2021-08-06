@@ -12,7 +12,9 @@ function stayConected(){
     setInterval(function (){
         let promise = axios.post(URL_STATUS,{name: userName});
         promise.then();
-        promise.catch(function(){alert("Erro em manter conexão");});
+        promise.catch(function(){
+            alert("Erro em manter conexão");
+            window.location.reload();});
     },5000);
 }
 
@@ -137,7 +139,7 @@ function populateOnlineUsers(users){
         content = `<li class="onlineUser" onclick="selectOnlineUser(this)">
                         <ion-icon name="people"></ion-icon>
                         <span id="user">Todos</span>
-                        <img class="check selectedUser" src="./img/check.png" alt="usuário selecionado"/>
+                        <img class="check selected" src="./img/check.png" alt="usuário selecionado"/>
                     </li>`;
     }else{
         content = `<li class="onlineUser" onclick="selectOnlineUser(this)">
@@ -156,7 +158,7 @@ function populateOnlineUsers(users){
             <li class="onlineUser" onclick="selectOnlineUser(this)">
                 <ion-icon name="person-circle"></ion-icon>
                 <span id="user">${onlineUsers[i].name}</span>
-                <img class="check selectedUser" src="./img/check.png" alt="usuário selecionado"/>
+                <img class="check selected" src="./img/check.png" alt="usuário selecionado"/>
             </li>`;
         }else{
             content += `
@@ -175,16 +177,33 @@ function populateUsersErro(error){
 }
 
 function selectOnlineUser(user){
-    let lastChecked = document.querySelector(".selectedUser");
+    let lastChecked = document.querySelector(".selected");
 
     if(lastChecked !== null){
-        lastChecked.classList.remove("selectedUser");
+        lastChecked.classList.remove("selected");
     }
     
     to = user.querySelector("#user").innerHTML;
-    user.querySelector(".check").classList.add("selectedUser");
+    user.querySelector(".check").classList.add("selected");
 }
 
+function setType(typeIn){
+    if (typeIn === type){
+        return;
+    }else{
+        let types = document.querySelectorAll(".msgVisibility .check");
+        types.forEach(element => {
+            if(element.classList.contains("selected")){
+                element.classList.remove("selected");
+            }else{
+                element.classList.add("selected");
+            }
+        });
+        type = typeIn;
+    }
+
+    console.log(to, type);
+}
 
 function userNav(){
     let nav = document.querySelector("nav");
